@@ -21,3 +21,12 @@ a {
 .btn-sub {
     width: 90%;
 }
+.noUnderline:hover {
+    text-decoration: none;
+}
+.ghLink {
+    color: black;
+}
+.inline {
+    display: inline;
+}
