@@ -1,0 +1,15 @@
+[Unit]                                                                                                                                                                                               
+Description=DegDB container                                                                                                                                                                          
+Requires=docker.service                                                                                                                                                                              
+After=docker.service
+
+[Service]
+Restart=always
+ExecStartPre=-/usr/bin/docker kill degdb_server
+ExecStartPre=-/usr/bin/docker rm degdb_server
+ExecStartPre=/usr/bin/docker pull degdb/degdb
+ExecStart=/usr/bin/docker run -p 80:8080 -v /src/degdb_data:/opt/degdb_data --name degdb_server -h %H degdb/degdb
+ExecStop=/usr/bin/docker stop -t 2 degdb_server ; /usr/bin/docker rm -f degdb_server
+
+[Install]
+WantedBy=multi-user.target
