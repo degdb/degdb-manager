@@ -6,3 +6,15 @@ body {
 a {
   color: #00B7FF;
 }
+.searchBoxPadTop {
+    padding-top: 20px;
+}
+.centered {
+    text-align: center;
+}
+.noDisplay {
+    display: none;
+}
+.btn-padding-right {
+    margin-right: 20px;
+}

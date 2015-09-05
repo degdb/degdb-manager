@@ -2,42 +2,19 @@ extends layout
 // this stuff goes in the head
 
 block head
-    script.
-        function main() {
-            $("#main").fadeIn();
-        }
-        function search() {
-            $("#searchData").fadeIn();
-        }
-        function dataPage(event) {
-            if(event.keyCode==13){
-            $("#dataPage").fadeIn();
-            $("#main").slideUp();
-            }
-        function newDataPage(event) {
-            if(event.keyCode==13) {
-                $("#dataPage").fadeIn();
-            }
-        }
-        }
+    script(src="/lib/index.js")
 
-        // this stuff goes in the body
 block content
-    h1#logo(onclick="main()" style="text-align: center;") degDB
-    div#main(style="display: none; text-align: center;")
-        p distributed economic graph DataBase
-        button.btn.btn-justified(onclick="search()")#dataMain data
-        button.btn.btn-justified#nodeMain node
-        button.btn.btn-justified#keyMain key
-        p
-        input#searchData(onkeydown="dataPage(event)" type="text" placeholder="search" style="display: none;")
-    div#dataPage(style="display: none; text-align: center")
-        p distributed economic graph DataBase
-        input#newDataSearch(onkeydown="newDataPage(event)" type="text" placeholder="new data search" style="text-align: center;")
-        button.btn.btn-justified node
-        button.btn.btn-justified key
-
-    div#nodePage(style="display: none; text-align: center;")
-        p distributed economic graph DataBase
-        input#searchNode(type="text" placeholder="search")
-                                          
+    div.centered.container-fluid
+        h1#logo degDB
+        div#main
+            p distributed economic graph database
+            button.btn.setActive.selectMode.btn-success.btn-padding-right#dataMain data
+            button.btn.setActive.selectMode.btn-warning.btn-padding-right#nodeMain node
+            button.btn.setActive.btn-danger#manageBtn manage
+            div.searchBoxPadTop.noDisplay#searchBox
+                div.col-md-4.col-md-offset-4
+                    input.form-control(type="text", placeholder="Search query")
+            div.searchBoxPadTop.noDisplay#manageLogin
+                div.col-md-4.col-md-offset-4
+                    input.form-control(type="text", name="apikey", placeholder="Linode API key")
