@@ -1,9 +1,31 @@
 extends layout
-
 // this stuff goes in the head
-block head
 
-// this stuff goes in the body
+block head
+    script.
+        function main() {
+            $("#main").fadeIn();
+        }
+        function search() {
+            $("#searchData").fadeIn();
+        }
+        function dataPage(event) {
+            if(event.keyCode==13){
+            $("#dataPage").fadeIn();
+            $("#main").slideUp();
+            }
+        }
+
+        // this stuff goes in the body
 block content
-  h1 degDB
-  p distributed economic graph DataBase
+    h1#logo(onclick="main()" style="text-align: center;") degDB
+    div#main(style="display: none; text-align: center;")
+        p distributed economic graph DataBase
+        button.btn.btn-justified(onclick="search()")#data data
+        button.btn.btn-justified#node node
+        button.btn.btn-justified#key key
+        p
+        input#searchData(onkeydown="dataPage(event)" type="text" placeholder="search" style="display: none;")
+    div#dataPage(style="display: none; text-align: center") data
+
+                                          
