@@ -14,6 +14,11 @@ block head
             $("#dataPage").fadeIn();
             $("#main").slideUp();
             }
+        function newDataPage(event) {
+            if(event.keyCode==13) {
+                $("#dataPage").fadeIn();
+            }
+        }
         }
 
         // this stuff goes in the body
@@ -21,11 +26,18 @@ block content
     h1#logo(onclick="main()" style="text-align: center;") degDB
     div#main(style="display: none; text-align: center;")
         p distributed economic graph DataBase
-        button.btn.btn-justified(onclick="search()")#data data
-        button.btn.btn-justified#node node
-        button.btn.btn-justified#key key
+        button.btn.btn-justified(onclick="search()")#dataMain data
+        button.btn.btn-justified#nodeMain node
+        button.btn.btn-justified#keyMain key
         p
         input#searchData(onkeydown="dataPage(event)" type="text" placeholder="search" style="display: none;")
-    div#dataPage(style="display: none; text-align: center") data
+    div#dataPage(style="display: none; text-align: center")
+        p distributed economic graph DataBase
+        input#newDataSearch(onkeydown="newDataPage(event)" type="text" placeholder="new data search" style="text-align: center;")
+        button.btn.btn-justified node
+        button.btn.btn-justified key
 
+    div#nodePage(style="display: none; text-align: center;")
+        p distributed economic graph DataBase
+        input#searchNode(type="text" placeholder="search")
                                           
