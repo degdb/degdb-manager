@@ -1,5 +1,5 @@
 * text auto
-*.ttf text auto
+*.ttf text eol=lf
 *.java text eol=lf
 *.js text eol=lf
 *.html text eol=lf
