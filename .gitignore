@@ -31,3 +31,8 @@ node_modules
 *.iml
 .idea
 workspace.xml
+
+# actual files
+config.json
+peers.json
+

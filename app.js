@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // setup gossip/SWIM engine
-//app.use('/swim',swim(node,{ verbose: true })); // TODO: WORKING
+//require("./util/gosipping").init(app); // TODO: fix after tristan wakes up
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
