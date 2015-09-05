@@ -1,7 +1,13 @@
 doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    // bootstrap
+    link(rel='stylesheet', href='/lib/bootstrap-3.3.5-dist/css/bootstrap.min.css')
+    script(type='text/javascript', src='/lib/bootstrap-3.3.5-dist/js/bootstrap.min.js')
+
+    // jquery
+    script(type='text/javascript', src='/lib/jquery-2.1.4.min.js')
+
+    block head
   body
     block content
