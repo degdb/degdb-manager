@@ -1,0 +1,11 @@
+[Unit]
+Description=DegDB container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl restart degdb
+
+[Install]
+WantedBy=multi-user.target

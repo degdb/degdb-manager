@@ -1,0 +1,10 @@
+[Unit]
+Description=DegDB container
+Requires=docker.service
+After=docker.service
+
+[Timer]
+OnUnitActiveSec=2h
+
+[Install]
+WantedBy=multi-user.target
