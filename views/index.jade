@@ -14,7 +14,14 @@ block content
             button.btn.setActive.btn-danger#manageBtn manage
             div.searchBoxPadTop.noDisplay#searchBox
                 div.col-md-4.col-md-offset-4
-                    input.form-control(type="text", placeholder="search query")
+                    form(action="/search", method="GET")
+                        input.form-control(type="text", id="search_query", name="search_query", placeholder="search query")
+                        div.searchBoxPadTop
+                            input.btn.btn-info.btn-sub(value="search", id="perform_search", type="button")
+
             div.searchBoxPadTop.noDisplay#manageLogin
                 div.col-md-4.col-md-offset-4
-                    input.form-control(type="text", name="apikey", placeholder="Linode API key")
+                    form(action="/authenticate", method="POST")
+                        input.form-control(type="text", name="linode_key", placeholder="Linode API key")
+                        div.searchBoxPadTop
+                            input.btn.btn-info.btn-sub(value="authenticate", type="submit")

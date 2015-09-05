@@ -2,10 +2,21 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var uuid = require('node-uuid');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+  genid: function(req) {
+      var buffer = new Array(32);
+      return uuid.unparse(buffer); // use UUIDs for session IDs
+  },
+  secret: 'keyboard cat'
+}));
 
 // setup gossip/SWIM engine
 //require("./util/gosipping").init(app); // TODO: fix after tristan wakes up
