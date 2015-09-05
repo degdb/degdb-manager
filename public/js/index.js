@@ -1,12 +1,13 @@
 // degDB index page JS
 $(function () {
     $(".setActive").click(function () {
-        var arr = ['#dataMain', '#nodeMain', 'manageBtn'];
+        var arr = ['#dataMain', '#nodeMain', '#manageBtn'];
         $.each(arr, function(i, val) {
             $(val).removeClass("active");
         });
 
         $(this).addClass("active");
+        window.current_action = $(this).text();
     });
     $(".selectMode").click(function () {
         // show data entry box
