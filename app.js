@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // pages
 app.use('/', require('./routes/pages'));
-app.use('/rest/linode', require('./routes/linode'));
+app.use('/', require('./routes/linode'));
 app.use('/rest/degdb', require('./routes/degdb'));
 
 // catch 404 and forward to error handler

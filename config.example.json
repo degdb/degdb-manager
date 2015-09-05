@@ -1,9 +1,0 @@
-{
-  "host": "localhost",
-  "port": 3000,
-
-  "externalHost": "localhost_123",
-  "externalPort": 3000,
-
-  "peerFile": "peers.json"
-}

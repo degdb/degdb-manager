@@ -14,7 +14,8 @@
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
     "request": "~2.61.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "linode-api": "~0.1.2"
   },
   "devDependencies": {
     "express-session": "~1.11.3"
