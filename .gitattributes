@@ -1,5 +1,5 @@
+# text
 * text auto
-*.ttf text eol=crlf
 *.java text eol=lf
 *.js text eol=lf
 *.html text eol=lf
@@ -8,6 +8,8 @@
 *.txt eol=lf
 *.xml text
 *.bat text eol=crlf
+
+# binary
 *.dat binary
 *.bin binary
 *.png binary
@@ -17,3 +19,8 @@
 *.jar binary
 *.7z binary
 *.db binary
+
+# fonts
+*.ttf binary
+*.otf binary
+*.woff binary
