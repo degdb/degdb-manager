@@ -1,9 +1,7 @@
 // degDB index page JS
 $(document).ready(function () {
     $("#dataMain").click(function () {
-        // show data entry box
-        $("#manageLogin").hide();
-        $('#searchBox').fadeIn();
+        window.location = "/search";
     });
     $("#manageBtn").click(function () {
         $("#searchBox").hide();
