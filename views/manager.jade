@@ -5,7 +5,8 @@ block content
     != nodesStr
     |;
   div.centered.padBottom
-    h1.centered degDB
+    h1.centered
+        a.noUnderline(href="/") degDB
     b.text-muted network status
   each node, i in nodes
     div.circleContainer.triggerMoreInfo(nodeNum="#{i}")= node['Name']
