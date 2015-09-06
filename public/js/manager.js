@@ -75,7 +75,7 @@ $(document).ready(function() {
             {
                 console.log("" + i + " -> " + JSON.stringify(nodes[i]));
                 var div = $("<div>");
-                div.addClass("circleContainer");
+                div.addClass("circleContainer pull-left");
                 div.data("nodeData", nodes[i]);
                 div.text(nodes[i].Name);
                 div.click(moreInfo);

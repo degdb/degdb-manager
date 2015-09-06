@@ -5,22 +5,17 @@ var session    = require('express-session');
 var linode     = require('linode-api');
 var Promise    = require('promise');
 
-function callLinodeClient(client, endpoint, data)
-{
+function callLinodeClient(client, endpoint, data) {
     // verify data isnt null to avoid NPE
-    if (!data)
-    {
+    if (!data) {
         data = {};
     }
     return new Promise(function (resolve, reject) {
-
         client.call(endpoint, data, function (err, resp) {
-            if (err)
-            {
+            if (err) {
                 reject(err);
             }
-            else
-            {
+            else {
                 resolve(resp);
             }
         });
@@ -28,8 +23,7 @@ function callLinodeClient(client, endpoint, data)
     });
 }
 
-function callLinode(key, endpoint, data)
-{
+function callLinode(key, endpoint, data) {
     var client = new(linode.LinodeClient)(key);
     return callLinodeClient(client, endpoint, data);
 }
@@ -39,11 +33,11 @@ router.get('/manage', function (req, res, next) {
 });
 
 router.post('/authenticate', function (req, res, next) {
-    callLinode(req.body.linode_key, 'test.echo').then( function() {
+    var linode_key = req.body.linode_key;
+    callLinode(req.body.linode_key, 'test.echo').then( function(err, content) {
         req.session.linode_key = linode_key; // on success
+        res.redirect("/manage"); // regardless of success or failure
     });
-
-    res.redirect("/manage"); // regardless of success or failure
 });
 
 router.get("/authenticate", function (req, res, next) {
@@ -79,13 +73,13 @@ router.get("/linode/createNode", function (req, res, next) {
     var nodeCreate = {
         DatacenterId: 6,
         PlanId: 1
-    }
+    };
     var diskCreate = {
         StackScriptID: 13073, // hardcoded our special one
         StackScriptUDFResponses: "", // nothing needed here
         DistributionID: 129, // centos
         Size: 10240, // 10GB minimum for centos
-    }
+    };
 
     if (!req.body.label)
     {
@@ -111,7 +105,7 @@ router.get("/linode/createNode", function (req, res, next) {
     // START THE ASYNC!
     var queryId = "" + (key++);
     var client = new(linode.LinodeClient)(req.session.linode_key);
-    statuses[queryId] = { done: false, message: "Creating linode instance"};
+    statuses[queryId] = { done: false, message: "Creating Linode instance"};
 
     callLinodeClient(client, "linode.create", nodeCreate).then( function(data) {
         statuses[queryId] = { done: false, message: "Preparing disk image"};
