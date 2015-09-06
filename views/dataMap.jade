@@ -1,27 +1,20 @@
-//
-   Created by Mykayla on 9/5/2015.
-
 extends layout
 
 block head
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8")
     link(rel='stylesheet', href='/stylesheets/dataMap.css')
-    img(src="/images/logo.png")
     script(src="/js/dataMap.js")
 
-    h1.inline#logo degDB
-        a.ghLink(href="//github.com/degdb")
-            i.fa.fa-github.fa-2x
 
-nav#circular-menu
-    div#circle
-    a(href="www.mfdesign.me" class="fa fa-home fa-2x")
-    a(href="www.mfdesign.me" class="fa fa-facebook fa-2x")
-    a(href="www.mfdesign.me" class="fa fa-twitter fa-2x")
-    a(href="www.mfdesign.me" class="fa fa-linkedin fa-2x")
-    a(href="www.mfdesign.me" class="fa fa-github fa-2x")
-    a(href="www.mfdesign.me" class="fa fa-rss fa-2x")
-    a(href="www.mfdesign.me" class="fa fa-pinterest fa-2x")
-    a(href="www.mfdesign.me" class="fa fa-asterisk fa-2x")
+block content
 
-a(class="menu-button fa fa-bars fa-2x")
+    .container-fluid.row
+        .col-sm-11
+            input.form-control(type="text" placeholder="Search")
+        button.btn.btn-default.col-sm-1
+            i.fa.fa-search
+
+    .container-fluid#canvas(style="margin-top: 50px")
+
+
 
