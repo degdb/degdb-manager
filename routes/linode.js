@@ -77,10 +77,16 @@ router.post("/linode/createNode", function (req, res, next) {
     };
     var diskCreate = {
         StackScriptID: 13073, // hardcoded our special one
-        StackScriptUDFResponses: "", // nothing needed here
+        StackScriptUDFResponses: "{}", // nothing needed here
         DistributionID: 129, // centos
         Size: 10240, // 10GB minimum for centos4
     };
+    var configCreate = {
+        KernelId: 138, // TODO: find kernel for "Latest 64 bit"
+        Label: "main config"
+        // add created disk
+    };
+    var boot = {};
 
     if (!req.body.label) {
         res.status(400).send('No Label');
@@ -99,26 +105,37 @@ router.post("/linode/createNode", function (req, res, next) {
     // reply
 
     // START THE ASYNC!
-    var queryId = "" + (key++);
-    res.send(queryId);
+    var queryId = key++;
+    res.send({ id: queryId });
     res.status(201).end(); // 201 accepted.. stuff ongoing...
 
+    queryId = ""+queryId; // convert to a string to use as a key later
     var client = new(linode.LinodeClient)(req.session.linode_key);
     statuses[queryId] = { done: false, message: "Creating Linode instance"};
 
     callLinodeClient(client, "linode.create", nodeCreate).then( function(data) {
         statuses[queryId] = { done: false, message: "Preparing disk image"};
-        diskCreate.LinodeId = data.DATA.LinodeId;
+        diskCreate.LinodeId = configCreate.LinodeId = boot.LinodeId = parseInt(data.LinodeID);
         return callLinodeClient(client, "linode.disk.createfromstackscript", diskCreate);
     }).then(function(data) {
+        statuses[queryId] = { done: false, message: "Creating boot configuration"};
+        configCreate.DiskList = "" + data.DiskID;
+        return callLinodeClient(client, "linode.config.create", configCreate);
+    }).then(function(data) {
         statuses[queryId] = { done: false, message: "Booting image"};
-        return callLinodeClient(client, "linode.boot", { LinodeId: diskCreate.LinodeId });
+        boot.configId = data.ConfigID;
+        return callLinodeClient(client, "linode.boot", boot);
+    }).then(function(data) {
+        statuses[queryId] = { done: true, message: "Done"}
     });
 });
 
 router.get("/linode/createNode/status/:key", function (req, res, next) {
-    var check = "" + req.param.key;
+    var check = req.params.key;
     var status = statuses[check];
+
+    console.log("STATUSES -> "+JSON.stringify(statuses));
+    console.log("STATUS -> (" + check + ") "+JSON.stringify(status));
 
     if (status) {
         res.send(status);
