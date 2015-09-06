@@ -58,7 +58,7 @@ function createModal(node)
 
 var moreInfo = function(event)
 {
-    createModal($(event.target).attr('nodeData'));
+    createModal($(event.target).data('nodeData'));
 }
 
 $(document).ready(function() {
