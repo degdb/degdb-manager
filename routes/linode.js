@@ -29,14 +29,18 @@ function callLinode(key, endpoint, data) {
 }
 
 router.get('/manage', function (req, res, next) {
-    res.render("manager", { has_key: !!req.session.linode_key } );
+    res.render("manager", { linode_key: req.session.linode_key } );
 });
 
 router.post('/authenticate', function (req, res, next) {
     var linode_key = req.body.linode_key;
-    callLinode(req.body.linode_key, 'test.echo').then( function(err, content) {
-        req.session.linode_key = linode_key; // on success
-        res.redirect("/manage"); // regardless of success or failure
+    var client = new(require('linode-api').LinodeClient)(linode_key);
+    client.call('test.echo', {msg: "hello world"}, function (err, resp) {
+        if (err) {
+            linode_key = false;
+        }
+        req.session.linode_key = linode_key;
+        return res.redirect("/manage");
     });
 });
 

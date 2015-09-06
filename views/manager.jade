@@ -6,7 +6,7 @@ block content
     b.text-muted network status
 
   div#nodes
-    if has_key
+    if linode_key !== false
         div.circleContainer.greenContainer.addNode +
 
   script(src="/js/manager.js")
