@@ -2,8 +2,8 @@ var express    = require('express');
 var router     = express.Router();
 var bodyParser = require("body-parser");
 var session    = require('express-session');
-var linode = require('linode-api');
-
+var linode     = require('linode-api');
+var Promise    = require('promise');
 
 function callLinodeClient(client, endpoint, data)
 {
