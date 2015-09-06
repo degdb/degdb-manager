@@ -16,8 +16,8 @@
     "linode-api": "~0.1.2",
     "morgan": "~1.6.1",
     "node-uuid": "^1.4.3",
-    "request": "~2.61.0",
-    "serve-favicon": "~2.3.0",
-    "promise": "~7.0.4"
+    "promise": "~7.0.4",
+    "request": "^2.61.0",
+    "serve-favicon": "~2.3.0"
   }
 }

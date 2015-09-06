@@ -1,58 +1,145 @@
 var express    = require('express');
 var router     = express.Router();
-var request    = require('request');
 var bodyParser = require("body-parser");
 var session    = require('express-session');
-var config     = require('../config.json');
-var Promise    = require('promise');
+var linode = require('linode-api');
 
 
-fetchLoc = config.server_prefix + "/api/v1/peers";
-router.get('/manage', function (req, res, next) {
-    var nodes = null;
-    request.get(fetchLoc, function optionalCallback(err, httpResponse, body) {
-        nodes = JSON.parse(body);
-        var promises = [];
-        nodes.forEach(function (nodeMod) {
-            var remoteHost = "http://" + nodeMod.Name + ":8080/api/v1/status";
-            promises.push(new Promise(function (resolve, reject) {
-                request.get(remoteHost, function(err1, httpResponse1, body1) {
-                    if (err1) return reject(err1);
-                    var tripleCount = JSON.parse(body1).triple_count;
-                    nodeMod.tripleCount = tripleCount;
-                    resolve(null);
-                });
-            }));
-        });
-        Promise.all(promises).then(function () {
-            if (req.session.linode_key) {
-                res.render("manager", {"nodes": nodes, "nodesStr": JSON.stringify(nodes)});
+function callLinodeClient(client, endpoint, data)
+{
+    // verify data isnt null to avoid NPE
+    if (!data)
+    {
+        data = {};
+    }
+    return new Promise(function (resolve, reject) {
+
+        client.call(endpoint, data, function (err, resp) {
+            if (err)
+            {
+                reject(err);
             }
-            else {
-                res.render("pretty-error", {"error": "You must be authenticated to use the manager."});
+            else
+            {
+                resolve(resp);
             }
-        }).then(null, function (err) {
-            next(err);
         });
+
     });
+}
+
+function callLinode(key, endpoint, data)
+{
+    var client = new(linode.LinodeClient)(key);
+    return callLinodeCLient(client, endoint, data);
+}
+
+
+router.get('/manage', function (req, res, next) {
+    res.render("manager", { has_key: !!req.session.linode_key } );
 });
 
 router.post('/authenticate', function (req, res, next) {
-    var linode_key = req.body.linode_key;
-    var client = new(require('linode-api').LinodeClient)(linode_key);
-    client.call('test.echo', {msg: "hello world"}, function (err, resp) {
-        if (err) {
-            return res.render("pretty-error", {"error": "Invalid API key."});
-        }
-        else {
-            req.session.linode_key = linode_key;
-            return res.redirect("/manage");
-        }
+    callLinode(req.body.linode_key, 'test.echo').then( function() {
+        req.session.linode_key = linode_key; // on success
+    }).finally( function() {
+        res.redirect("/manage"); // regardless of success or failure
     });
 });
 
 router.get("/authenticate", function (req, res, next) {
     res.redirect("/");
+});
+
+router.get("/linode/listNodes", function (req, res, next) {
+    if (!req.session.linode_key)
+    {
+        res.sendStatus(403); // forbidden
+    }
+    else
+    {
+        callLinode(req.body.linode_key, 'linode.list').then( function(data) {
+            res.send({ data: data.DATA });
+        });
+    }
+});
+
+// NODE CREATION
+var statuses = {};
+var key = 1;
+
+router.get("/linode/createNode", function (req, res, next) {
+
+    if (!req.session.linode_key)
+    {
+        res.status(403).end(); // forbidden
+        return;
+    }
+
+    // set defaults
+    var nodeCreate = {
+        DatacenterId: 6,
+        PlanId: 1
+    }
+    var diskCreate = {
+        StackScriptID: 13073, // hardcoded our special one
+        StackScriptUDFResponses: "", // nothing needed here
+        DistributionID: 129, // centos
+        Size: 10240, // 10GB minimum for centos
+    }
+
+    if (!req.body.label)
+    {
+        res.status(400).send('No Label');
+        return;
+    }
+    else if (!req.body.rootPass)
+    {
+        res.status(400).send('No root pass');
+        return;
+    }
+    else
+    {
+        diskCreate.Label = req.body.label;
+        diskCreate.rootPass = req.body.rootPass;
+        // TODO: SSH key
+    }
+
+    // reply
+    res.status(201).end(); // 201 accepted.. stuff ongoing...
+    // then
+
+    // START THE ASYNC!
+    var queryId = "" + (key++);
+    var client = new(linode.LinodeClient)(req.session.linode_key);
+    statuses[queryId] = { done: false, message: "Creating linode instance"};
+
+    callLinodeClient(client, "linode.create", nodeCreate).then( function(data) {
+        statuses[queryId] = { done: false, message: "Preparing disk image"};
+        diskCreate.LinodeId = data.DATA.LinodeId;
+        return callLinodeClient(client, "linode.disk.createfromstackscript", diskCreate);
+    }).then(function(data) {
+        statuses[queryId] = { done: false, message: "Booting image"};
+        return callLinodeClient(client, "linode.boot", { LinodeId: diskCreate.LinodeId });
+    });
+});
+
+router.get("/linode/createNode/status/:key", function (req, res, next) {
+    var check = "" + req.param.key;
+    var status = statuses[check];
+
+    if (status)
+    {
+        res.send(status);
+        if (status.done)
+        {
+            statuses[check] = undefined;
+        }
+    }
+    else
+    {
+        res.status(404).send("No such status id");
+    }
 });
 
 module.exports = router;
