@@ -9,7 +9,6 @@ fetchLoc = config.server_prefix + "/api/v1/peers";
 router.get('/getAllNodes', function (req, res, next) {
     var nodes = null;
     request.get(fetchLoc, function optionalCallback(err, httpResponse, body) {
-        console.log(err);
         nodes = JSON.parse(body);
         var promises = [];
         nodes.forEach(function (nodeMod) {
@@ -17,7 +16,15 @@ router.get('/getAllNodes', function (req, res, next) {
             promises.push(new Promise(function (resolve, reject) {
                 request.get(remoteHost, function (err1, httpResponse1, body1) {
                     if (err1) return reject(err1);
+
                     var tripleCount = JSON.parse(body1).triple_count;
+
+                    // normalize to 0
+                    if (tripleCount == undefined)
+                    {
+                        tripleCount = 0;
+                    }
+
                     nodeMod.tripleCount = tripleCount;
                     resolve(null);
                 });

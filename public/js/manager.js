@@ -102,7 +102,7 @@ function createServerInfoModal(node) {
      modal = modal.replace("#{name}", node.Name);
      modal = modal.replace("#{address}", node.Addr);
      modal = modal.replace("#{port}", node.Port);
-     modal = modal.replace("#{triples}", node.Triples);
+     modal = modal.replace("#{triples}", node.tripleCount);
      createModal("Node information", modal);
 }
 
