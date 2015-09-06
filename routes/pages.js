@@ -12,6 +12,11 @@ router.get('/search', function (req, res, next) {
     res.render('dataMap');
 });
 
+router.get('/performQuery', function (req, res, next) {
+    res.render('performQuery');
+});
+
+
 /* GET index */
 router.get('/setup', function (req, res, next) {
     res.render('setup');

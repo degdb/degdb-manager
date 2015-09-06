@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    div.centered
+        h1
+            a.noUnderline(href="/") degDB
+        b.text-muted perform arbitrary degDB query
+    div.iframePadding
+        iframe.queryFrame(src="http://raven.fn.lc:8080/static/triples.html", frameBorder="0")

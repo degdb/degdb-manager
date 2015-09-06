@@ -9,4 +9,7 @@ $(document).ready(function () {
         $("#searchBox").hide();
         $("#manageLogin").fadeIn();
     });
+    $("#queryMain").click(function () {
+        window.location = "/performQuery";
+    });
 });
