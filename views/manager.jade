@@ -4,6 +4,9 @@ block content
     h1.centered
         a.noUnderline(href="/") degDB
     b.text-muted network status
+    i.fa.fa-refresh#refresh
+    b.text-muted refresh status
+
     div
         div.pull-right
             p.text-muted Powered by Linode
@@ -13,6 +16,5 @@ block content
   div#nodes
     if linode_key !== false
         div.circleContainer.greenContainer.addNode +
-        
 
   script(src="/js/manager.js")

@@ -39,8 +39,15 @@ a {
 .linodeLogo {
     width: 100px;
 }
+.createSpin {
+    padding-right: 20px;
+}
+.createServer {
+    margin-top: 20px;
+}
 .circleContainer {
     margin-left: 20px;
+    margin-bottom: 20px;
     width: 200px;
     height: 200px;
     border-radius: 100px;
@@ -51,4 +58,8 @@ a {
     text-align: center;
     background: #3c6eb4;
     display: inline-block;
+}
+#refresh {
+    padding-left: 20px;
+    padding-right: 20px;
 }

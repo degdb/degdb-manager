@@ -34,6 +34,7 @@ function createNewServerModal() {
     <br />\
     <input type="text" id="label" class="form-control createField" placeholder="label" />\
     <br />\
+    <div id="createSpin" class="noDisplay"><i class="fa fa-spin fa-gear fa-2x"></i></div><b id="createStatus" class="text-muted"></b>\
     <a class="btn btn-warning" id="createServer">create server</a>\
     ';
     createModal("Create Node", modal);
@@ -44,7 +45,28 @@ function createNewServerModal() {
             data: {"rootPass": $("#rootPass").val(), "label": $("#label").val()}
         })
         .done(function( data ) {
-            console.log(data);
+            var provisionId = data.id;
+            $("#createServer").attr('disabled', 'disabled');
+            $("#createSpin").show();
+            var pollStatus = window.setInterval(function () {
+                $.ajax({
+                    url: "/linode/createNode/status/" + provisionId,
+                    method: "GET"
+                }).done(function (data2, textStatus2, xhr2) {
+                    var message = data2.message;
+                    if (data2.done === true) {
+                        $("#createServer").removeAttr('disabled');
+                        $("#createSpin").hide();
+                        $("#createStatus").text("Creation succeeded!");
+                        clearInterval(pollStatus);
+                    }
+                    else {
+                        $("#createStatus").text(message);
+                    }
+                });
+            }, 1000);
+
+
         });
     });
 }
