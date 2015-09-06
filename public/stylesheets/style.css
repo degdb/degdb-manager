@@ -36,6 +36,9 @@ a {
 .greenContainer {
     background: green !important;
 }
+.linodeLogo {
+    width: 100px;
+}
 .circleContainer {
     margin-left: 20px;
     width: 200px;
@@ -43,10 +46,9 @@ a {
     border-radius: 100px;
     font-size: 20px;
     color: #fff;
-    padding-top: 100px;
+    padding-top: 90px;
     /*line-height: 100px;*/
     text-align: center;
     background: #3c6eb4;
     display: inline-block;
 }
-

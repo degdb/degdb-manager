@@ -49,12 +49,10 @@ router.get("/authenticate", function (req, res, next) {
 });
 
 router.get("/linode/listNodes", function (req, res, next) {
-    if (!req.session.linode_key)
-    {
+    if (!req.session.linode_key) {
         res.sendStatus(403); // forbidden
     }
-    else
-    {
+    else {
         callLinode(req.body.linode_key, 'linode.list').then( function(data) {
             res.send({ data: data.DATA });
         });
@@ -65,10 +63,9 @@ router.get("/linode/listNodes", function (req, res, next) {
 var statuses = {};
 var key = 1;
 
-router.get("/linode/createNode", function (req, res, next) {
+router.post("/linode/createNode", function (req, res, next) {
 
-    if (!req.session.linode_key)
-    {
+    if (!req.session.linode_key) {
         res.status(403).end(); // forbidden
         return;
     }
@@ -82,32 +79,30 @@ router.get("/linode/createNode", function (req, res, next) {
         StackScriptID: 13073, // hardcoded our special one
         StackScriptUDFResponses: "", // nothing needed here
         DistributionID: 129, // centos
-        Size: 10240, // 10GB minimum for centos
+        Size: 10240, // 10GB minimum for centos4
     };
 
-    if (!req.body.label)
-    {
+    if (!req.body.label) {
         res.status(400).send('No Label');
         return;
     }
-    else if (!req.body.rootPass)
-    {
+    else if (!req.body.rootPass) {
         res.status(400).send('No root pass');
         return;
     }
-    else
-    {
+    else {
         diskCreate.Label = req.body.label;
         diskCreate.rootPass = req.body.rootPass;
         // TODO: SSH key
     }
 
     // reply
-    res.status(201).end(); // 201 accepted.. stuff ongoing...
-    // then
 
     // START THE ASYNC!
     var queryId = "" + (key++);
+    res.send(queryId);
+    res.status(201).end(); // 201 accepted.. stuff ongoing...
+
     var client = new(linode.LinodeClient)(req.session.linode_key);
     statuses[queryId] = { done: false, message: "Creating Linode instance"};
 
@@ -125,16 +120,13 @@ router.get("/linode/createNode/status/:key", function (req, res, next) {
     var check = "" + req.param.key;
     var status = statuses[check];
 
-    if (status)
-    {
+    if (status) {
         res.send(status);
-        if (status.done)
-        {
+        if (status.done) {
             statuses[check] = undefined;
         }
     }
-    else
-    {
+    else {
         res.status(404).send("No such status id");
     }
 });

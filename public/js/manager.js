@@ -1,5 +1,4 @@
-function createModal(node)
-{
+function createModal(title, body) {
     var modal = '\
     <div class="modal fade" id="SLModal" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">\
     <div class="modal-dialog">\
@@ -9,32 +8,7 @@ function createModal(node)
          <h4 class="modal-title inline" id="modalLabel">#{title}</h4>\
        </div>\
        <div class="modal-body">\
-       <table class="table table-striped">\
-    <thead>\
-      <tr>\
-        <th>Field</th>\
-        <th>Value</th>\
-      </tr>\
-        </thead>\
-        <tbody>\
-          <tr>\
-            <td>Name</td>\
-            <td>#{name}</td>\
-          </tr>\
-          <tr>\
-            <td>Address</td>\
-            <td>#{address}</td>\
-          </tr>\
-          <tr>\
-            <td>Port</td>\
-            <td>#{port}</td>\
-          </tr>\
-          <tr>\
-            <td>Total Triples</td>\
-            <td>#{triples}</td>\
-          </tr>\
-        </tbody>\
-        </table>\
+       #{body}\
        </div>\
        <div class="modal-footer">\
          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
@@ -43,12 +17,10 @@ function createModal(node)
     </div>\
     </div>\
     ';
-    modal = modal.replace("#{title}", "Node Information");
-    modal = modal.replace("#{name}", node.Name);
-    modal = modal.replace("#{address}", node.Addr);
-    modal = modal.replace("#{port}", node.Port);
+    modal = modal.replace("#{body}", body);
+    modal = modal.replace("#{title}", title);
 
-    modal = modal.replace("#{triples}", node.Triples);
+
     $("body").append(modal);
     $('#SLModal').modal();
     $( "body" ).delegate( "#SLModal", "hidden.bs.modal", function () {
@@ -56,9 +28,64 @@ function createModal(node)
     });
 }
 
-var moreInfo = function(event)
-{
-    createModal($(event.target).data('nodeData'));
+function createNewServerModal() {
+    var modal = '\
+    <input type="text" id="rootPass" class="form-control createField" placeholder="root password" />\
+    <br />\
+    <input type="text" id="label" class="form-control createField" placeholder="label" />\
+    <br />\
+    <a class="btn btn-warning" id="createServer">create server</a>\
+    ';
+    createModal("Create Node", modal);
+    $( "body" ).delegate( "#createServer", "click", function () {
+        $.ajax({
+            url: "/linode/createNode",
+            method: "POST",
+            data: {"rootPass": $("#rootPass").val(), "label": $("#label").val()}
+        })
+        .done(function( data ) {
+            console.log(data);
+        });
+    });
+}
+
+function createServerInfoModal(node) {
+    var modal = '\
+    <table class="table table-striped">\
+ <thead>\
+   <tr>\
+     <th>Field</th>\
+     <th>Value</th>\
+   </tr>\
+     </thead>\
+     <tbody>\
+       <tr>\
+         <td>Name</td>\
+         <td>#{name}</td>\
+       </tr>\
+       <tr>\
+         <td>Address</td>\
+         <td>#{address}</td>\
+       </tr>\
+       <tr>\
+         <td>Port</td>\
+         <td>#{port}</td>\
+       </tr>\
+       <tr>\
+         <td>Total Triples</td>\
+         <td>#{triples}</td>\
+       </tr>\
+     </tbody>\
+     </table>';
+     modal = modal.replace("#{name}", node.Name);
+     modal = modal.replace("#{address}", node.Addr);
+     modal = modal.replace("#{port}", node.Port);
+     modal = modal.replace("#{triples}", node.Triples);
+     createModal("Node information", modal);
+}
+
+var moreInfo = function(event) {
+    createServerInfoModal($(event.target).data('nodeData'));
 }
 
 $(document).ready(function() {
@@ -82,5 +109,8 @@ $(document).ready(function() {
                 div.prependTo(container);
             }
         }
+    });
+    $(".addNode").click(function () {
+        createNewServerModal();
     });
 });
