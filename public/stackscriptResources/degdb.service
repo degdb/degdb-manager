@@ -8,7 +8,7 @@ Restart=always
 ExecStartPre=-/usr/bin/docker kill degdb_server
 ExecStartPre=-/usr/bin/docker rm degdb_server
 ExecStartPre=/usr/bin/docker pull degdb/degdb
-ExecStart=/usr/bin/docker run -p 80:8080 -p 7946:7946 -p 7946:7946/udp -v /src/degdb_data:/opt/degdb_data --name degdb_server degdb/degdb /go/bin/app -hostname=%H
+ExecStart=/usr/bin/docker run -p 8080:8080 -p 7946:7946 -p 7946:7946/udp -v /src/degdb_data:/opt/degdb_data --name degdb_server degdb/degdb /go/bin/app -hostname=%H -peer="raven.fn.lc;nicki.fn.lc;li1232-195.members.linode.com"
 ExecStop=/usr/bin/docker stop -t 2 degdb_server ; /usr/bin/docker rm -f degdb_server
 
 [Install]
