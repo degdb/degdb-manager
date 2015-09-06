@@ -11,15 +11,15 @@ block content
             i.fa.fa-github.fa-2x
         div#main
             p distributed economic graph database
-            button.btn.setActive.selectMode.btn-success.btn-padding-right(data-toggle="tooltip", data-placement="botom", title="search and display data from query")#dataMain data
-            button.btn.setActive.selectMode.btn-warning.btn-padding-right(data-toggle="tooltip", data-placement="botom", title="search and display servers 'nodes' connected to query")#nodeMain node
-            button.btn.setActive.btn-danger(data-toggle="tooltip", data-placement="botom", title="add new data and new servers via linode key")#manageBtn manage
+            button.btn.btn-success.btn-padding-right(data-toggle="tooltip", data-placement="botom", title="search and display data from query")#dataMain data
+            button.btn.btn-danger(data-toggle="tooltip", data-placement="botom", title="add new data and new servers via linode key")#manageBtn manage
+
             div.searchBoxPadTop.noDisplay#searchBox
                 div.col-md-4.col-md-offset-4
                     form(action="/search", method="GET")
                         input.form-control(type="text", id="search_query", name="search_query", placeholder="search query")
                         div.searchBoxPadTop
-                            input.btn.btn-info.btn-sub(value="search", id="perform_search", type="button")
+                            input.btn.btn-info.btn-sub(value="search", type="submit")
 
             div.searchBoxPadTop.noDisplay#manageLogin
                 div.col-md-4.col-md-offset-4
