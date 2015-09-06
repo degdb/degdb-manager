@@ -1,14 +1,14 @@
 extends layout
-
-// this stuff goes in the head
-block head
-
-// this stuff goes in the body
 block content
-  h1.centered degDB
-  div.col-md-6
-    h4 Operations
-    a.btn.btn-warning#provisionNew provision new server
-  div.col-md-6
-    h4 Map
-    p Map goes here
+  script
+    | var nodeInfo = 
+    != nodesStr
+    |;
+  div.centered.padBottom
+    h1.centered degDB
+    b.text-muted network status
+  each node, i in nodes
+    div.circleContainer.triggerMoreInfo(nodeNum="#{i}")= node['Name']
+
+  div.circleContainer.greenContainer.addNode +
+  script(src="/js/manager.js")

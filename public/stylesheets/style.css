@@ -30,3 +30,22 @@ a {
 .inline {
     display: inline;
 }
+.padBottom {
+    padding-bottom: 40px;
+}
+.greenContainer {
+    background: green !important;
+}
+.circleContainer {
+    margin-left: 20px;
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+    font-size: 20px;
+    color: #fff;
+    padding-top: 50px;
+    line-height: 100px;
+    text-align: center;
+    background: #3c6eb4;
+    display: inline-block;
+}

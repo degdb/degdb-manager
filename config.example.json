@@ -4,6 +4,6 @@
 
   "externalHost": "localhost_123",
   "externalPort": 3000,
-
+  "server_prefix": "https://server.degdb.co",
   "peerFile": "peer.json"
 }
