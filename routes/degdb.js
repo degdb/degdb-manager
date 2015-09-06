@@ -24,7 +24,7 @@ router.get('/getAllNodes', function (req, res, next) {
             }));
         });
         Promise.all(promises).then(function () {
-            res.send({"nodes": nodes, "nodesStr": JSON.stringify(nodes)});
+            res.send({"nodes": nodes });
         }).then(null, function (err) {
             next(err);
         });

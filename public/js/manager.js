@@ -1,4 +1,5 @@
-function createModal(node) {
+function createModal(node)
+{
     var modal = '\
     <div class="modal fade" id="SLModal" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">\
     <div class="modal-dialog">\
@@ -55,8 +56,31 @@ function createModal(node) {
     });
 }
 
-$(".triggerMoreInfo").click(function () {
-    var nodeNum = $(this).attr('nodeNum');
-    var node = nodeInfo[nodeNum];
-    createModal(node);
+var moreInfo = function(event)
+{
+    createModal($(event.target).attr('nodeData'));
+}
+
+$(document).ready(function() {
+    var container = $("#nodes");
+
+    $.ajax({
+        url: "/rest/degdb/getAllNodes",
+        dataType: 'json',
+        method: "GET",
+        success: function(data, status, request) {
+            console.log("DATA -> "+JSON.stringify(data));
+            var nodes = data.nodes;
+            for (var i = 0; i < nodes.length; i++)
+            {
+                console.log("" + i + " -> " + JSON.stringify(nodes[i]));
+                var div = $("<div>");
+                div.addClass("circleContainer");
+                div.data("nodeData", nodes[i]);
+                div.text(nodes[i].Name);
+                div.click(moreInfo);
+                div.prependTo(container);
+            }
+        }
+    });
 });

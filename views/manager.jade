@@ -1,15 +1,11 @@
 extends layout
 block content
-  script
-    | var nodeInfo = 
-    != nodesStr
-    |;
   div.centered.padBottom
     h1.centered
         a.noUnderline(href="/") degDB
     b.text-muted network status
-  each node, i in nodes
-    div.circleContainer.triggerMoreInfo(nodeNum="#{i}")= node['Name']
 
-  div.circleContainer.greenContainer.addNode +
+  div#nodes
+    div.circleContainer.greenContainer.addNode +
+
   script(src="/js/manager.js")

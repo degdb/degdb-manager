@@ -31,9 +31,8 @@ function callLinodeClient(client, endpoint, data)
 function callLinode(key, endpoint, data)
 {
     var client = new(linode.LinodeClient)(key);
-    return callLinodeCLient(client, endoint, data);
+    return callLinodeClient(client, endpoint, data);
 }
-
 
 router.get('/manage', function (req, res, next) {
     res.render("manager", { has_key: !!req.session.linode_key } );
@@ -42,9 +41,9 @@ router.get('/manage', function (req, res, next) {
 router.post('/authenticate', function (req, res, next) {
     callLinode(req.body.linode_key, 'test.echo').then( function() {
         req.session.linode_key = linode_key; // on success
-    }).finally( function() {
-        res.redirect("/manage"); // regardless of success or failure
     });
+
+    res.redirect("/manage"); // regardless of success or failure
 });
 
 router.get("/authenticate", function (req, res, next) {
